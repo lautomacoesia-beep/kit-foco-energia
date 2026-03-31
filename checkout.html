@@ -805,14 +805,14 @@
           <span class="field-error" id="emailError">E-mail inválido</span>
         </div>
       </div>
-      <div class="form-row full">
-        <div class="field">
-          <label>CPF</label>
-          <input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14">
-          <span class="field-error" id="cpfError">CPF inválido</span>
-        </div>
-      </div>
+   <div class="form-row full">
+    <div class="field">
+        <label>Telefone</label>
+        <input type="tel" id="phone" placeholder="(00) 00000-0000" maxlength="15">
+        <span class="field-error" id="phoneError">Telefone inválido</span>
     </div>
+</div>
+
 
     <!-- PAGAMENTO -->
     <div class="block">
@@ -1084,14 +1084,15 @@
     }
   }
 
-  // CPF MASK
-  document.getElementById('cpf').addEventListener('input', function(e) {
-    let v = e.target.value.replace(/\D/g,'');
-    if (v.length > 11) v = v.slice(0,11);
-    v = v.replace(/(\d{3})(\d)/,'$1.$2');
-    v = v.replace(/(\d{3})(\d)/,'$1.$2');
-    v = v.replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-    e.target.value = v;
+ 
+document.getElementById('phone').addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/, '($1) $2');
+  e.target.value = v;
+});
+
   });
 
   // CARD NUMBER MASK
@@ -1115,7 +1116,7 @@
       { id: 'firstName', errId: 'firstNameError', check: v => v.trim().length > 1 },
       { id: 'lastName', errId: 'lastNameError', check: v => v.trim().length > 1 },
       { id: 'email', errId: 'emailError', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
-      { id: 'cpf', errId: 'cpfError', check: v => v.replace(/\D/g,'').length === 11 },
+    { id: 'phone', errId: 'phoneError', check: v => v.replace(/\D/g,'').length >= 10 },
     ];
     fields.forEach(f => {
       const el = document.getElementById(f.id);
