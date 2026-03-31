@@ -1084,16 +1084,14 @@
     }
   }
 
- 
-document.getElementById('phone').addEventListener('input', function(e) {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-  else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
-  else if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/, '($1) $2');
-  e.target.value = v;
-});
-
-
+  // PHONE MASK
+  document.getElementById('phone').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    else if (v.length > 6) v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
+    else if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/, '($1) $2');
+    e.target.value = v;
+  });
 
   // CARD NUMBER MASK
   document.getElementById('cardNumberInput').addEventListener('input', function(e) {
@@ -1116,7 +1114,7 @@ document.getElementById('phone').addEventListener('input', function(e) {
       { id: 'firstName', errId: 'firstNameError', check: v => v.trim().length > 1 },
       { id: 'lastName', errId: 'lastNameError', check: v => v.trim().length > 1 },
       { id: 'email', errId: 'emailError', check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
-    { id: 'phone', errId: 'phoneError', check: v => v.replace(/\D/g,'').length >= 10 },
+      { id: 'phone', errId: 'phoneError', check: v => v.replace(/\D/g,'').length >= 10 },
     ];
     fields.forEach(f => {
       const el = document.getElementById(f.id);
@@ -1143,11 +1141,7 @@ document.getElementById('phone').addEventListener('input', function(e) {
     btn.classList.add('loading');
     btn.querySelector('.btn-text').textContent = 'Processando pagamento...';
     setTimeout(() => {
-     window.location.href = 'https://pay.cakto.com.br/gof2qrj_826669';
-  
+      window.location.href = 'https://pay.cakto.com.br/gof2qrj_826669';
     }, 2200);
   }
 </script>
-
-</body>
-</html>
