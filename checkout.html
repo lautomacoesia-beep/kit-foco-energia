@@ -1143,8 +1143,8 @@ document.getElementById('phone').addEventListener('input', function(e) {
     btn.classList.add('loading');
     btn.querySelector('.btn-text').textContent = 'Processando pagamento...';
     setTimeout(() => {
-      btn.classList.remove('loading');
-      document.getElementById('successOverlay').classList.add('show');
+     window.location.href = 'https://pay.cakto.com.br/gof2qrj_826669';
+  
     }, 2200);
   }
 
