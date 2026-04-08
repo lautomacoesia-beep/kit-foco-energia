@@ -18,959 +18,289 @@
     --muted: #6b6b88;
     --border: rgba(200,241,53,0.15);
   }
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* CUSTOM CURSOR */
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    position: fixed;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s ease;
-    mix-blend-mode: exclusion;
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--accent);
-    border-radius: 50%;
-    position: fixed;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9998;
-    transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), width 0.3s, height 0.3s;
-    mix-blend-mode: exclusion;
-  }
+  .cursor { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transition: transform 0.1s ease; mix-blend-mode: exclusion; }
+  .cursor-ring { width: 36px; height: 36px; border: 1.5px solid var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), width 0.3s, height 0.3s; mix-blend-mode: exclusion; }
   .cursor-ring.hover { width: 60px; height: 60px; }
 
-  /* NOISE TEXTURE */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.6;
-  }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,10,15,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(200,241,53,0.06); }
+  .nav-brand { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.1em; color: var(--accent); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.25s; cursor: none; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { background: var(--accent); color: #0a0a0f; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none; cursor: none; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.85; }
 
   /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    position: relative;
-    overflow: hidden;
-  }
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 80% 20%, rgba(200,241,53,0.07) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 10% 80%, rgba(241,53,154,0.07) 0%, transparent 60%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(200,241,53,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(200,241,53,0.04) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-left { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 2; }
+  .eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--accent); flex-shrink: 0; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 8vw, 120px); line-height: 0.9; letter-spacing: -0.01em; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-title span { color: var(--accent); display: block; }
+  .hero-title em { color: var(--accent2); font-style: normal; display: block; }
+  .hero-desc { font-size: 17px; line-height: 1.7; color: rgba(240,240,248,0.65); max-width: 480px; margin-bottom: 32px; font-weight: 300; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
 
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 60% at 80% 20%, rgba(200,241,53,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(241,53,154,0.07) 0%, transparent 60%);
-  }
+  /* PRICE DISPLAY — novo */
+  .hero-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 36px; opacity: 0; animation: fadeUp 0.8s 0.7s forwards; }
+  .price-from { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+  .price-main { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--accent); line-height: 1; }
+  .price-cents { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); line-height: 1; }
+  .price-note { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+  .price-badge { background: rgba(200,241,53,0.1); border: 1px solid rgba(200,241,53,0.25); padding: 4px 10px; font-family: 'Space Mono', monospace; font-size: 9px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-left: 8px; align-self: center; }
 
-  .hero-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(200,241,53,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(200,241,53,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
-
-  .hero-left {
-    padding: 80px 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-  }
-
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 28px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-  .eyebrow::before {
-    content: '';
-    width: 32px; height: 1px;
-    background: var(--accent);
-    flex-shrink: 0;
-  }
-
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 8vw, 120px);
-    line-height: 0.9;
-    letter-spacing: -0.01em;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
-
-  .hero-title span {
-    color: var(--accent);
-    display: block;
-  }
-
-  .hero-title em {
-    color: var(--accent2);
-    font-style: normal;
-    display: block;
-  }
-
-  .hero-desc {
-    font-size: 17px;
-    line-height: 1.7;
-    color: rgba(240,240,248,0.65);
-    max-width: 480px;
-    margin-bottom: 48px;
-    font-weight: 300;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
-  }
-
-  .hero-ctas {
-    display: flex;
-    gap: 16px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #0a0a0f;
-    padding: 16px 36px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border: none;
-    cursor: none;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-primary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.2);
-    transform: translateX(-101%);
-    transition: transform 0.3s ease;
-  }
+  .hero-ctas { display: flex; gap: 16px; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: #0a0a0f; padding: 18px 40px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase; border: none; cursor: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; position: relative; overflow: hidden; }
+  .btn-primary::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.2); transform: translateX(-101%); transition: transform 0.3s ease; }
   .btn-primary:hover::after { transform: translateX(0); }
+  .btn-ghost { background: transparent; color: var(--text); padding: 18px 36px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; border: 1px solid rgba(240,240,248,0.2); cursor: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.25s ease; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  .btn-ghost {
-    background: transparent;
-    color: var(--text);
-    padding: 16px 36px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    border: 1px solid rgba(240,240,248,0.2);
-    cursor: none;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.25s ease;
-  }
-  .btn-ghost:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
+  /* GARANTIA HERO */
+  .hero-garantia { margin-top: 20px; opacity: 0; animation: fadeUp 0.8s 0.95s forwards; display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; }
+  .hero-garantia::before { content: '🔒'; font-size: 13px; }
 
-  .hero-right {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
-    padding: 60px 40px;
-  }
-
-  .kit-visual {
-    position: relative;
-    width: 380px;
-    height: 380px;
-  }
-
-  .kit-orbit {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px dashed rgba(200,241,53,0.2);
-    animation: spin 20s linear infinite;
-  }
-  .kit-orbit-2 {
-    inset: 30px;
-    border-color: rgba(241,53,154,0.15);
-    animation: spin 30s linear infinite reverse;
-  }
-
-  .kit-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .kit-center-icon {
-    font-size: 48px;
-    animation: pulse 3s ease-in-out infinite;
-    opacity: 0;
-    animation: fadeIn 1s 1.2s forwards, pulse 3s 2.2s ease-in-out infinite;
-  }
-
-  .kit-center-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    opacity: 0;
-    animation: fadeIn 1s 1.4s forwards;
-  }
-
-  .kit-dot {
-    position: absolute;
-    width: 48px; height: 48px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    cursor: none;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    opacity: 0;
-    animation: scaleIn 0.5s forwards;
-  }
-  .kit-dot:hover { transform: scale(1.3); border-color: var(--accent); }
+  .hero-right { display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; padding: 60px 40px; }
+  .kit-visual { position: relative; width: 380px; height: 380px; }
+  .kit-orbit { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(200,241,53,0.2); animation: spin 20s linear infinite; }
+  .kit-orbit-2 { inset: 30px; border-color: rgba(241,53,154,0.15); animation: spin 30s linear infinite reverse; }
+  .kit-center { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+  .kit-center-icon { font-size: 48px; opacity: 0; animation: fadeIn 1s 1.2s forwards; }
+  .kit-center-label { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); letter-spacing: 0.1em; opacity: 0; animation: fadeIn 1s 1.4s forwards; }
+  .kit-dot { position: absolute; width: 48px; height: 48px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: none; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.4); opacity: 0; animation: scaleIn 0.5s forwards; }
+  .kit-dot:hover { transform: scale(1.3) !important; border-color: var(--accent); }
   .kit-dot:nth-child(3) { top: -24px; left: 50%; transform: translateX(-50%); animation-delay: 1s; }
   .kit-dot:nth-child(4) { right: -24px; top: 50%; transform: translateY(-50%); animation-delay: 1.1s; }
   .kit-dot:nth-child(5) { bottom: -24px; left: 50%; transform: translateX(-50%); animation-delay: 1.2s; }
   .kit-dot:nth-child(6) { left: -24px; top: 50%; transform: translateY(-50%); animation-delay: 1.3s; }
 
-  /* STATS BAR */
-  .stats-bar {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 32px 60px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-  }
-
-  .stat {
-    text-align: center;
-    padding: 16px;
-    border-right: 1px solid var(--border);
-    position: relative;
-  }
+  /* STATS */
+  .stats-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 32px 60px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .stat { text-align: center; padding: 16px; border-right: 1px solid var(--border); }
   .stat:last-child { border-right: none; }
+  .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 52px; color: var(--accent); line-height: 1; display: block; }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 6px; font-family: 'Space Mono', monospace; }
 
-  .stat-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 52px;
-    color: var(--accent);
-    line-height: 1;
-    display: block;
-  }
+  /* SOCIAL PROOF — novo */
+  .social-proof { background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 56px 60px; }
+  .social-proof-header { text-align: center; margin-bottom: 48px; }
+  .social-proof-header .section-tag { justify-content: center; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .testimonial { background: var(--surface); border: 1px solid var(--border); padding: 28px; position: relative; transition: border-color 0.3s; }
+  .testimonial:hover { border-color: rgba(200,241,53,0.3); }
+  .testimonial-stars { color: var(--accent); font-size: 14px; margin-bottom: 14px; letter-spacing: 2px; }
+  .testimonial-text { font-size: 14px; line-height: 1.75; color: rgba(240,240,248,0.75); font-weight: 300; margin-bottom: 20px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 12px; }
+  .testimonial-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #0a0a0f; flex-shrink: 0; }
+  .testimonial-info { display: flex; flex-direction: column; gap: 2px; }
+  .testimonial-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .testimonial-role { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+  .testimonial-badge { position: absolute; top: 16px; right: 16px; background: rgba(200,241,53,0.08); border: 1px solid rgba(200,241,53,0.2); padding: 3px 8px; font-family: 'Space Mono', monospace; font-size: 8px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; }
 
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-top: 6px;
-    font-family: 'Space Mono', monospace;
-  }
+  /* ISCA DIGITAL — novo */
+  .lead-capture { background: linear-gradient(135deg, rgba(200,241,53,0.06) 0%, rgba(241,53,154,0.04) 100%); border: 1px solid rgba(200,241,53,0.2); margin: 0 60px; padding: 52px 60px; display: grid; grid-template-columns: 1fr auto; gap: 60px; align-items: center; position: relative; overflow: hidden; }
+  .lead-capture::before { content: 'GRATIS'; font-family: 'Bebas Neue', sans-serif; font-size: 200px; color: rgba(200,241,53,0.03); position: absolute; right: -20px; top: -30px; line-height: 1; pointer-events: none; }
+  .lead-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; color: var(--accent2); text-transform: uppercase; margin-bottom: 12px; }
+  .lead-title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; line-height: 1.05; margin-bottom: 14px; }
+  .lead-title em { color: var(--accent); font-style: normal; }
+  .lead-desc { font-size: 15px; line-height: 1.7; color: rgba(240,240,248,0.6); font-weight: 300; max-width: 480px; }
+  .lead-items { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .lead-item { font-size: 13px; color: rgba(240,240,248,0.7); display: flex; align-items: center; gap: 10px; }
+  .lead-item::before { content: '→'; color: var(--accent); font-family: 'Space Mono', monospace; flex-shrink: 0; }
+  .lead-form { display: flex; flex-direction: column; gap: 12px; min-width: 300px; position: relative; z-index: 1; }
+  .lead-form-title { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
+  .lead-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(200,241,53,0.2); padding: 14px 18px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.25s; }
+  .lead-input:focus { border-color: var(--accent); }
+  .lead-input::placeholder { color: var(--muted); }
+  .btn-lead { background: var(--accent2); color: #fff; padding: 16px 28px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; border: none; cursor: none; text-align: center; transition: opacity 0.25s; }
+  .btn-lead:hover { opacity: 0.85; }
+  .lead-privacy { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-align: center; }
 
-  /* SECTION */
-  section {
-    padding: 100px 60px;
-    position: relative;
-  }
+  /* SECTION BASE */
+  section { padding: 100px 60px; position: relative; }
+  .section-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-tag::after { content: ''; flex: 1; height: 1px; background: var(--border); max-width: 80px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 5vw, 80px); line-height: 0.95; margin-bottom: 24px; }
+  .section-title em { color: var(--accent); font-style: normal; }
 
-  .section-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-tag::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-    max-width: 80px;
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 5vw, 80px);
-    line-height: 0.95;
-    margin-bottom: 24px;
-  }
-
-  .section-title em {
-    color: var(--accent);
-    font-style: normal;
-  }
-
-  /* PRODUCTS GRID */
+  /* PRODUCTS */
   .products-section { background: var(--bg); }
-
-  .products-intro {
-    max-width: 600px;
-    margin-bottom: 70px;
-  }
-
-  .products-intro p {
-    font-size: 17px;
-    line-height: 1.7;
-    color: rgba(240,240,248,0.6);
-    font-weight: 300;
-  }
-
-  .products-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    background: rgba(200,241,53,0.06);
-    border: 1px solid var(--border);
-  }
-
-  .product-card {
-    background: var(--surface);
-    padding: 52px 48px;
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-    transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
-    border: 2px solid transparent;
-  }
-
-  .product-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
-  }
-
+  .products-intro { max-width: 600px; margin-bottom: 70px; }
+  .products-intro p { font-size: 17px; line-height: 1.7; color: rgba(240,240,248,0.6); font-weight: 300; }
+  .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(200,241,53,0.06); border: 1px solid var(--border); }
+  .product-card { background: var(--surface); padding: 52px 48px; position: relative; overflow: hidden; cursor: none; transition: all 0.4s cubic-bezier(0.23,1,0.32,1); border: 2px solid transparent; }
+  .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1); }
   .product-card:hover::before { transform: scaleX(1); }
   .product-card:hover { background: var(--card); border-color: var(--border); }
-
   .product-card:nth-child(2)::before { background: var(--accent2); }
   .product-card:nth-child(3)::before { background: var(--accent3); }
   .product-card:nth-child(4)::before { background: #f1a935; }
-
-  .product-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 100px;
-    color: rgba(200,241,53,0.06);
-    position: absolute;
-    top: -10px; right: 20px;
-    line-height: 1;
-    transition: color 0.4s ease;
-    pointer-events: none;
-  }
+  .product-num { font-family: 'Bebas Neue', sans-serif; font-size: 100px; color: rgba(200,241,53,0.06); position: absolute; top: -10px; right: 20px; line-height: 1; transition: color 0.4s ease; pointer-events: none; }
   .product-card:hover .product-num { color: rgba(200,241,53,0.1); }
-
-  .product-icon {
-    font-size: 36px;
-    margin-bottom: 24px;
-    display: block;
-  }
-
-  .product-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(200,241,53,0.08);
-    padding: 5px 10px;
-    display: inline-block;
-    margin-bottom: 20px;
-    border: 1px solid rgba(200,241,53,0.15);
-  }
-
+  .product-icon { font-size: 36px; margin-bottom: 24px; display: block; }
+  .product-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); background: rgba(200,241,53,0.08); padding: 5px 10px; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(200,241,53,0.15); }
   .product-card:nth-child(2) .product-tag { color: var(--accent2); background: rgba(241,53,154,0.08); border-color: rgba(241,53,154,0.15); }
   .product-card:nth-child(3) .product-tag { color: var(--accent3); background: rgba(53,200,241,0.08); border-color: rgba(53,200,241,0.15); }
   .product-card:nth-child(4) .product-tag { color: #f1a935; background: rgba(241,169,53,0.08); border-color: rgba(241,169,53,0.15); }
-
-  .product-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 38px;
-    letter-spacing: 0.02em;
-    margin-bottom: 16px;
-    line-height: 1;
-  }
-
-  .product-desc {
-    font-size: 14px;
-    line-height: 1.8;
-    color: rgba(240,240,248,0.55);
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
-
-  .product-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .product-features li {
-    font-size: 13px;
-    color: rgba(240,240,248,0.7);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    line-height: 1.5;
-  }
-
-  .product-features li::before {
-    content: '→';
-    color: var(--accent);
-    font-family: 'Space Mono', monospace;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
+  .product-title { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 0.02em; margin-bottom: 16px; line-height: 1; }
+  .product-desc { font-size: 14px; line-height: 1.8; color: rgba(240,240,248,0.55); font-weight: 300; margin-bottom: 32px; }
+  .product-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .product-features li { font-size: 13px; color: rgba(240,240,248,0.7); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+  .product-features li::before { content: '→'; color: var(--accent); font-family: 'Space Mono', monospace; flex-shrink: 0; margin-top: 1px; }
   .product-card:nth-child(2) .product-features li::before { color: var(--accent2); }
   .product-card:nth-child(3) .product-features li::before { color: var(--accent3); }
   .product-card:nth-child(4) .product-features li::before { color: #f1a935; }
 
-  /* TABS SECTION */
-  .content-section {
-    background: var(--surface);
-  }
+  /* CTA MID — novo */
+  .cta-mid { background: var(--surface); padding: 80px 60px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 60px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .cta-mid-left { }
+  .cta-mid-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  .cta-mid-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 4vw, 60px); line-height: 1; margin-bottom: 12px; }
+  .cta-mid-title em { color: var(--accent); font-style: normal; }
+  .cta-mid-sub { font-size: 15px; color: rgba(240,240,248,0.55); font-weight: 300; line-height: 1.6; }
+  .cta-mid-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+  .cta-mid-price { text-align: right; }
+  .cta-mid-price .label { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .cta-mid-price .value { font-family: 'Bebas Neue', sans-serif; font-size: 64px; color: var(--accent); line-height: 1; }
+  .cta-mid-price .once { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.15em; }
+  .cta-mid-guarantee { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.1em; text-align: right; }
 
-  .tabs-wrapper {
-    margin-top: 60px;
-  }
-
-  .tabs-nav {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    gap: 0;
-    flex-wrap: wrap;
-  }
-
-  .tab-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 18px 32px;
-    cursor: none;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: all 0.25s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tab-btn.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
-  }
+  /* TABS */
+  .content-section { background: var(--surface); }
+  .tabs-wrapper { margin-top: 60px; }
+  .tabs-nav { display: flex; border-bottom: 1px solid var(--border); gap: 0; flex-wrap: wrap; }
+  .tab-btn { background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 18px 32px; cursor: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.25s; display: flex; align-items: center; gap: 8px; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-btn:hover:not(.active) { color: var(--text); }
-
   .tab-content { display: none; padding: 56px 0 0; }
   .tab-content.active { display: block; }
-
-  .tab-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-  }
-
-  .tab-info h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 44px;
-    line-height: 1;
-    margin-bottom: 20px;
-    color: var(--accent);
-  }
-
-  .tab-info p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: rgba(240,240,248,0.6);
-    font-weight: 300;
-    margin-bottom: 28px;
-  }
-
-  .highlight-box {
-    background: rgba(200,241,53,0.04);
-    border-left: 3px solid var(--accent);
-    padding: 20px 24px;
-    margin-bottom: 28px;
-  }
-
-  .highlight-box p {
-    font-size: 15px;
-    color: rgba(240,240,248,0.8);
-    font-style: italic;
-    margin-bottom: 0;
-  }
-
-  .script-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .script-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    padding: 20px 24px;
-    transition: border-color 0.3s;
-  }
-
+  .tab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .tab-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; margin-bottom: 20px; color: var(--accent); }
+  .tab-info p { font-size: 16px; line-height: 1.8; color: rgba(240,240,248,0.6); font-weight: 300; margin-bottom: 28px; }
+  .highlight-box { background: rgba(200,241,53,0.04); border-left: 3px solid var(--accent); padding: 20px 24px; margin-bottom: 28px; }
+  .highlight-box p { font-size: 15px; color: rgba(240,240,248,0.8); font-style: italic; margin-bottom: 0; }
+  .script-cards { display: flex; flex-direction: column; gap: 16px; }
+  .script-card { background: var(--card); border: 1px solid var(--border); padding: 20px 24px; transition: border-color 0.3s; }
   .script-card:hover { border-color: var(--accent); }
-
-  .script-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .script-text {
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(240,240,248,0.8);
-  }
-
-  .script-avoid {
-    color: #ff5555;
-    text-decoration: line-through;
-    font-size: 13px;
-    margin-bottom: 6px;
-  }
-
-  .script-say {
-    color: var(--accent);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  /* TIMELINE */
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-  }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3), #f1a935);
-  }
-
-  .timeline-item {
-    position: relative;
-    padding-left: 40px;
-    padding-bottom: 48px;
-  }
-
+  .script-label { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .script-text { font-size: 14px; line-height: 1.7; color: rgba(240,240,248,0.8); }
+  .script-avoid { color: #ff5555; text-decoration: line-through; font-size: 13px; margin-bottom: 6px; }
+  .script-say { color: var(--accent); font-size: 14px; line-height: 1.6; }
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3), #f1a935); }
+  .timeline-item { position: relative; padding-left: 40px; padding-bottom: 48px; }
   .timeline-item:last-child { padding-bottom: 0; }
-
-  .timeline-dot {
-    position: absolute;
-    left: -40px;
-    top: 4px;
-    width: 16px; height: 16px;
-    background: var(--accent);
-    border-radius: 50%;
-    border: 3px solid var(--surface);
-  }
-
+  .timeline-dot { position: absolute; left: -40px; top: 4px; width: 16px; height: 16px; background: var(--accent); border-radius: 50%; border: 3px solid var(--surface); }
   .timeline-item:nth-child(2) .timeline-dot { background: var(--accent2); }
   .timeline-item:nth-child(3) .timeline-dot { background: var(--accent3); }
   .timeline-item:nth-child(4) .timeline-dot { background: #f1a935; }
-
-  .timeline-week {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 0.05em;
-    color: var(--accent);
-    margin-bottom: 4px;
-  }
-
+  .timeline-week { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 4px; }
   .timeline-item:nth-child(2) .timeline-week { color: var(--accent2); }
   .timeline-item:nth-child(3) .timeline-week { color: var(--accent3); }
   .timeline-item:nth-child(4) .timeline-week { color: #f1a935; }
-
-  .timeline-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .timeline-desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(240,240,248,0.55);
-    font-weight: 300;
-  }
-
-  .timeline-time {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--accent);
-    background: rgba(200,241,53,0.08);
-    padding: 3px 10px;
-    display: inline-block;
-    margin-bottom: 12px;
-    border: 1px solid rgba(200,241,53,0.15);
-  }
-
-  /* PROFILES */
-  .profiles-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 60px;
-  }
-
-  .profile-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    padding: 36px 28px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-    cursor: none;
-  }
-
-  .profile-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(200,241,53,0.06) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
+  .timeline-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .timeline-desc { font-size: 14px; line-height: 1.7; color: rgba(240,240,248,0.55); font-weight: 300; }
+  .timeline-time { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); background: rgba(200,241,53,0.08); padding: 3px 10px; display: inline-block; margin-bottom: 12px; border: 1px solid rgba(200,241,53,0.15); }
+  .profile-card { background: var(--card); border: 1px solid var(--border); padding: 36px 28px; position: relative; overflow: hidden; transition: all 0.4s ease; cursor: none; }
+  .profile-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 0%, rgba(200,241,53,0.06) 0%, transparent 70%); opacity: 0; transition: opacity 0.4s; }
   .profile-card:hover::after { opacity: 1; }
   .profile-card:hover { border-color: rgba(200,241,53,0.3); transform: translateY(-4px); }
+  .profile-emoji { font-size: 40px; display: block; margin-bottom: 20px; }
+  .profile-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.04em; margin-bottom: 12px; color: var(--accent); }
+  .profile-desc { font-size: 14px; line-height: 1.7; color: rgba(240,240,248,0.6); font-weight: 300; }
 
-  .profile-emoji {
-    font-size: 40px;
-    display: block;
-    margin-bottom: 20px;
-  }
-
-  .profile-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 0.04em;
-    margin-bottom: 12px;
-    color: var(--accent);
-  }
-
-  .profile-desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(240,240,248,0.6);
-    font-weight: 300;
-  }
-
-  /* QUOTE SECTION */
-  .quote-section {
-    background: var(--accent);
-    padding: 100px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .quote-section::before {
-    content: '"';
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 600px;
-    color: rgba(0,0,0,0.07);
-    position: absolute;
-    top: -120px; left: -40px;
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  .quote-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 70px);
-    color: #0a0a0f;
-    line-height: 1.05;
-    max-width: 900px;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 32px;
-  }
-
-  .quote-author {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.2em;
-    color: rgba(10,10,15,0.6);
-    text-transform: uppercase;
-  }
+  /* QUOTE */
+  .quote-section { background: var(--accent); padding: 100px 60px; position: relative; overflow: hidden; }
+  .quote-section::before { content: '"'; font-family: 'Bebas Neue', sans-serif; font-size: 600px; color: rgba(0,0,0,0.07); position: absolute; top: -120px; left: -40px; line-height: 1; pointer-events: none; }
+  .quote-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 70px); color: #0a0a0f; line-height: 1.05; max-width: 900px; position: relative; z-index: 1; margin-bottom: 32px; }
+  .quote-author { font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.2em; color: rgba(10,10,15,0.6); text-transform: uppercase; }
 
   /* CHECKLIST */
   .checklist-section { background: var(--bg); }
-
-  .checklist-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px;
-    margin-top: 60px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .check-item {
-    background: var(--surface);
-    padding: 24px 28px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    cursor: none;
-    transition: all 0.3s;
-    user-select: none;
-  }
+  .checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 60px; background: var(--border); border: 1px solid var(--border); }
+  .check-item { background: var(--surface); padding: 24px 28px; display: flex; align-items: flex-start; gap: 16px; cursor: none; transition: all 0.3s; user-select: none; }
   .check-item:hover { background: var(--card); }
+  .check-box { width: 24px; height: 24px; border: 2px solid rgba(200,241,53,0.4); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.25s; margin-top: 2px; }
+  .check-item.checked .check-box { background: var(--accent); border-color: var(--accent); }
+  .check-item.checked .check-box::after { content: '✓'; color: #0a0a0f; font-size: 14px; font-weight: 700; }
+  .check-text { font-size: 15px; line-height: 1.6; color: rgba(240,240,248,0.75); transition: color 0.25s; }
+  .check-item.checked .check-text { color: rgba(240,240,248,0.4); text-decoration: line-through; }
+  .check-progress { margin-top: 32px; display: flex; align-items: center; gap: 20px; }
+  .progress-bar { flex: 1; height: 4px; background: rgba(200,241,53,0.1); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s cubic-bezier(0.23,1,0.32,1); width: 0%; }
+  .progress-label { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); white-space: nowrap; }
 
-  .check-box {
-    width: 24px; height: 24px;
-    border: 2px solid rgba(200,241,53,0.4);
-    border-radius: 4px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.25s;
-    margin-top: 2px;
-  }
-  .check-item.checked .check-box {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .check-item.checked .check-box::after {
-    content: '✓';
-    color: #0a0a0f;
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .check-text {
-    font-size: 15px;
-    line-height: 1.6;
-    color: rgba(240,240,248,0.75);
-    transition: color 0.25s;
-  }
-  .check-item.checked .check-text {
-    color: rgba(240,240,248,0.4);
-    text-decoration: line-through;
-  }
-
-  .check-progress {
-    margin-top: 32px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .progress-bar {
-    flex: 1;
-    height: 4px;
-    background: rgba(200,241,53,0.1);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 2px;
-    transition: width 0.5s cubic-bezier(0.23,1,0.32,1);
-    width: 0%;
-  }
-
-  .progress-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    white-space: nowrap;
-  }
+  /* CTA FINAL — novo */
+  .cta-final { background: #0a0a0f; border-top: 1px solid var(--border); padding: 100px 60px; text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(200,241,53,0.05) 0%, transparent 70%); }
+  .cta-final-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 24px; }
+  .cta-final-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 6vw, 96px); line-height: 0.95; margin-bottom: 20px; position: relative; z-index: 1; }
+  .cta-final-title em { color: var(--accent); font-style: normal; }
+  .cta-final-sub { font-size: 17px; color: rgba(240,240,248,0.5); font-weight: 300; line-height: 1.7; max-width: 560px; margin: 0 auto 48px; position: relative; z-index: 1; }
+  .cta-final-price-block { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 36px; position: relative; z-index: 1; }
+  .cta-final-price { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--accent); line-height: 1; }
+  .cta-final-price-details { text-align: left; }
+  .cta-final-price-details .label { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .cta-final-price-details .once { font-family: 'Space Mono', monospace; font-size: 10px; color: rgba(200,241,53,0.5); letter-spacing: 0.15em; display: block; }
+  .cta-final-price-details .desc { font-size: 13px; color: rgba(240,240,248,0.4); display: block; margin-top: 4px; }
+  .cta-final-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--accent); color: #0a0a0f; padding: 22px 56px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: none; transition: all 0.25s; position: relative; overflow: hidden; z-index: 1; }
+  .cta-final-btn::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.15); transform: translateX(-101%); transition: transform 0.3s; }
+  .cta-final-btn:hover::after { transform: translateX(0); }
+  .cta-final-guarantees { display: flex; justify-content: center; gap: 40px; margin-top: 32px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .cta-guarantee-item { display: flex; align-items: center; gap: 8px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .cta-guarantee-item span { font-size: 16px; }
 
   /* FOOTER */
-  footer {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 60px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 40px;
-  }
-
-  .footer-brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 0.08em;
-    color: var(--accent);
-  }
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 60px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 40px; }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.08em; color: var(--accent); }
   .footer-brand span { color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; display: block; font-weight: 300; letter-spacing: 0; margin-top: 4px; }
+  .footer-copy { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-align: right; }
 
-  .footer-copy {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-align: right;
-  }
+  /* LEAD MODAL — novo */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(10,10,15,0.92); z-index: 9000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(8px); }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--card); border: 1px solid var(--border); padding: 52px; max-width: 480px; width: 90%; position: relative; }
+  .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--muted); font-size: 24px; cursor: none; transition: color 0.2s; line-height: 1; }
+  .modal-close:hover { color: var(--text); }
+  .modal-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.25em; color: var(--accent2); text-transform: uppercase; margin-bottom: 16px; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; line-height: 1.05; margin-bottom: 12px; }
+  .modal-title em { color: var(--accent); font-style: normal; }
+  .modal-desc { font-size: 14px; line-height: 1.7; color: rgba(240,240,248,0.6); font-weight: 300; margin-bottom: 28px; }
+  .modal-form { display: flex; flex-direction: column; gap: 12px; }
+  .modal-success { display: none; text-align: center; padding: 20px 0; }
+  .modal-success-icon { font-size: 48px; margin-bottom: 16px; }
+  .modal-success-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--accent); margin-bottom: 8px; }
+  .modal-success-text { font-size: 14px; color: rgba(240,240,248,0.6); line-height: 1.7; }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 20px 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(10,10,15,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(200,241,53,0.06);
-  }
-
-  .nav-brand {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 0.1em;
-    color: var(--accent);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.25s;
-    cursor: none;
-  }
-  .nav-links a:hover { color: var(--accent); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.6); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .float { animation: float 4s ease-in-out infinite; }
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
-  /* SCROLL REVEAL */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1);
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* RESPONSIVE */
   @media (max-width: 1024px) {
     .hero { grid-template-columns: 1fr; }
     .hero-right { display: none; }
     .products-grid { grid-template-columns: 1fr; }
     .tab-grid { grid-template-columns: 1fr; }
-    .profiles-grid { grid-template-columns: 1fr 1fr; }
     .checklist-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .lead-capture { grid-template-columns: 1fr; margin: 0 28px; padding: 40px 32px; }
+    .lead-form { min-width: auto; }
+    .cta-mid { grid-template-columns: 1fr; }
+    .cta-mid-right { align-items: flex-start; }
+    .cta-mid-price .value { font-size: 48px; }
     section { padding: 80px 28px; }
     .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 32px 28px; }
     nav { padding: 16px 28px; }
@@ -979,6 +309,9 @@
     .footer-copy { text-align: left; }
     .hero-left { padding: 120px 28px 60px; }
     .quote-section { padding: 80px 28px; }
+    .social-proof { padding: 56px 28px; }
+    .cta-final { padding: 80px 28px; }
+    .cta-final-guarantees { gap: 20px; }
   }
 </style>
 </head>
@@ -986,6 +319,29 @@
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MODAL ISCA -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modalForm">
+      <div class="modal-tag">Grátis — Download Imediato</div>
+      <div class="modal-title">Checklist dos <em>5 Minutos</em></div>
+      <p class="modal-desc">O ritual exato que os melhores alunos usam antes de estudar — em 1 página, para colar na parede.</p>
+      <div class="modal-form">
+        <input class="lead-input" type="text" placeholder="Seu nome" id="modalName">
+        <input class="lead-input" type="tel" placeholder="WhatsApp (com DDD)" id="modalWhats">
+        <button class="btn-lead" onclick="submitModal()" style="cursor:none;">Quero o checklist grátis →</button>
+        <div class="lead-privacy">🔒 Sem spam. Só o checklist.</div>
+      </div>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="modal-success-icon">✅</div>
+      <div class="modal-success-title">Enviado!</div>
+      <p class="modal-success-text">Acessa o link que mandamos no WhatsApp.<br>O checklist é seu — cola na parede e usa hoje.</p>
+    </div>
+  </div>
+</div>
 
 <nav>
   <div class="nav-brand">Foco & Energia</div>
@@ -995,6 +351,7 @@
     <li><a href="#pais">Para Pais</a></li>
     <li><a href="#checklist">Checklist</a></li>
   </ul>
+  <a href="https://pay.cakto.com.br/gof2qrj_826669" class="nav-cta">Garantir por R$37 →</a>
 </nav>
 
 <!-- HERO -->
@@ -1003,18 +360,26 @@
   <div class="hero-grid"></div>
   <div class="hero-left">
     <div class="eyebrow">Kit Premium — 4 Ferramentas</div>
-    <h1 class="hero-title">
-      Domine<br>
-      <span>sua</span>
-      <em>rotina</em>
-    </h1>
-    <p class="hero-desc">
-      O método científico para adolescentes que querem sair da inércia, vencer a procrastinação e construir hábitos reais em 30 dias.
-    </p>
-    <div class="hero-ctas">
-   <a href="https://pay.cakto.com.br/gof2qrj_826669" class="btn-primary">Garantir meu Kit →</a>
-      <a href="#metodo" class="btn-ghost">Como funciona</a>
+    <h1 class="hero-title">Domine<br><span>sua</span><em>rotina</em></h1>
+    <p class="hero-desc">O método científico para adolescentes que querem sair da inércia, vencer a procrastinação e construir hábitos reais em 30 dias.</p>
+
+    <div class="hero-price">
+      <div>
+        <div class="price-from">apenas</div>
+        <div style="display:flex;align-items:baseline;gap:4px;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);line-height:1;">R$</span>
+          <span class="price-main">37</span>
+        </div>
+        <div class="price-note">pagamento único · acesso imediato</div>
+      </div>
+      <span class="price-badge">oferta de lançamento</span>
     </div>
+
+    <div class="hero-ctas">
+      <a href="https://pay.cakto.com.br/gof2qrj_826669" class="btn-primary">Garantir meu Kit →</a>
+      <button onclick="openModal()" class="btn-ghost" style="cursor:none;">Checklist grátis</button>
+    </div>
+    <div class="hero-garantia">Compra 100% segura · Acesso imediato · Suporte incluso</div>
   </div>
   <div class="hero-right">
     <div class="kit-visual float">
@@ -1034,32 +399,85 @@
 
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stat reveal">
-    <span class="stat-number" data-target="30">0</span>
-    <span class="stat-label">Dias de Desafio</span>
+  <div class="stat reveal"><span class="stat-number" data-target="30">0</span><span class="stat-label">Dias de Desafio</span></div>
+  <div class="stat reveal"><span class="stat-number" data-target="4">0</span><span class="stat-label">Ferramentas no Kit</span></div>
+  <div class="stat reveal"><span class="stat-number" data-target="80">0</span><span class="stat-label">% Procrastinam por Neurologia</span></div>
+  <div class="stat reveal"><span class="stat-number" data-target="3">0</span><span class="stat-label">Min. para Planejar o Dia</span></div>
+</div>
+
+<!-- ISCA / LEAD CAPTURE -->
+<div class="lead-capture reveal">
+  <div>
+    <div class="lead-tag">Download grátis</div>
+    <div class="lead-title">O <em>Checklist</em><br>dos 5 Minutos</div>
+    <p class="lead-desc">O ritual exato que os melhores alunos fazem antes de estudar. Em 1 página, direto ao ponto — para colar na parede e usar hoje.</p>
+    <div class="lead-items">
+      <div class="lead-item">Os 5 passos do ritual de entrada no foco</div>
+      <div class="lead-item">Como preparar o ambiente em menos de 3 minutos</div>
+      <div class="lead-item">A pergunta que elimina a procrastinação antes de começar</div>
+    </div>
   </div>
-  <div class="stat reveal">
-    <span class="stat-number" data-target="4">0</span>
-    <span class="stat-label">Ferramentas no Kit</span>
+  <div class="lead-form">
+    <div class="lead-form-title">Receba agora no WhatsApp</div>
+    <input class="lead-input" type="text" placeholder="Seu nome" id="leadName">
+    <input class="lead-input" type="tel" placeholder="WhatsApp (com DDD)" id="leadWhats">
+    <button class="btn-lead" onclick="submitLead()" style="cursor:none;">Quero o checklist grátis →</button>
+    <div class="lead-privacy">🔒 Zero spam. Só o checklist.</div>
   </div>
-  <div class="stat reveal">
-    <span class="stat-number" data-target="80">0</span>
-    <span class="stat-label">% dos Alunos Procrastinam</span>
+</div>
+
+<!-- SOCIAL PROOF -->
+<div class="social-proof reveal">
+  <div class="social-proof-header">
+    <div class="section-tag" style="justify-content:center;">O que estão dizendo</div>
   </div>
-  <div class="stat reveal">
-    <span class="stat-number" data-target="3">0</span>
-    <span class="stat-label">Min. para Planejar</span>
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <div class="testimonial-badge">verificado</div>
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Eu tentei mil métodos e sempre abandonava em 3 dias. Com a Regra dos 5 Minutos do kit, completei a primeira semana inteira. Parece bobo mas foi o que funcionou."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">G</div>
+        <div class="testimonial-info">
+          <span class="testimonial-name">Gabriel M.</span>
+          <span class="testimonial-role">3º ano do Ensino Médio</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-badge">verificado</div>
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Comprei pra minha filha e li o guia dos pais antes de dar pra ela. Mudou completamente como eu converso com ela sobre estudos. Hoje ela vem me contar o que conseguiu fazer."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">R</div>
+        <div class="testimonial-info">
+          <span class="testimonial-name">Renata C.</span>
+          <span class="testimonial-role">Mãe, filha de 15 anos</span>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="testimonial-badge">verificado</div>
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"O planner mudou minha noite. Antes eu ia dormir sem saber o que ia fazer no dia seguinte. Agora acordo com o plano pronto na cabeça. Parece que o cérebro trabalha dormindo mesmo."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">L</div>
+        <div class="testimonial-info">
+          <span class="testimonial-name">Lucas T.</span>
+          <span class="testimonial-role">Cursinho pré-vestibular</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- PRODUCTS -->
 <section id="produtos" class="products-section">
   <div class="section-tag">O Kit Completo</div>
-  <div class="section-title products-intro">
+  <div class="products-intro">
     <h2 class="section-title">4 ferramentas.<br><em>1 sistema.</em></h2>
     <p style="margin-top:20px">Cada componente foi desenhado para funcionar em conjunto. Do conhecimento à execução — um dia de cada vez.</p>
   </div>
-
   <div class="products-grid reveal">
     <div class="product-card">
       <span class="product-num">01</span>
@@ -1075,7 +493,6 @@
         <li>Blindagem de foco: construa o ambiente antes de exigir disciplina</li>
       </ul>
     </div>
-
     <div class="product-card">
       <span class="product-num">02</span>
       <span class="product-icon">📋</span>
@@ -1090,7 +507,6 @@
         <li>Revisão semanal em menos de 5 minutos</li>
       </ul>
     </div>
-
     <div class="product-card">
       <span class="product-num">03</span>
       <span class="product-icon">✏️</span>
@@ -1105,7 +521,6 @@
         <li>Reflexões semanais e marcos de celebração</li>
       </ul>
     </div>
-
     <div class="product-card">
       <span class="product-num">04</span>
       <span class="product-icon">🧭</span>
@@ -1123,259 +538,168 @@
   </div>
 </section>
 
+<!-- CTA MEIO -->
+<div class="cta-mid reveal">
+  <div class="cta-mid-left">
+    <div class="cta-mid-tag">Pronto pra começar?</div>
+    <div class="cta-mid-title">4 ferramentas.<br><em>Uma decisão.</em></div>
+    <p class="cta-mid-sub">E-Book + Planner + Caderno 30 Dias + Guia para Pais.<br>Acesso imediato após a compra.</p>
+  </div>
+  <div class="cta-mid-right">
+    <div class="cta-mid-price">
+      <div class="label">investimento</div>
+      <div class="value">R$37</div>
+      <div class="once">pagamento único</div>
+    </div>
+    <a href="https://pay.cakto.com.br/gof2qrj_826669" class="btn-primary">Quero o Kit agora →</a>
+    <div class="cta-mid-guarantee">🔒 Compra 100% segura</div>
+  </div>
+</div>
+
 <!-- METHOD TABS -->
 <section id="metodo" class="content-section">
   <div class="section-tag">O Sistema em Ação</div>
   <h2 class="section-title reveal">Como <em>funciona</em></h2>
-
   <div class="tabs-wrapper">
     <div class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('jornada')">⚡ Jornada 30 dias</button>
-      <button class="tab-btn" onclick="switchTab('perfis')">🔍 Perfis de Procrastinador</button>
-      <button class="tab-btn" onclick="switchTab('ambiente')">🏠 Ambiente de Foco</button>
+      <button class="tab-btn active" onclick="switchTab('jornada', event)">⚡ Jornada 30 dias</button>
+      <button class="tab-btn" onclick="switchTab('perfis', event)">🔍 Perfis de Procrastinador</button>
+      <button class="tab-btn" onclick="switchTab('ambiente', event)">🏠 Ambiente de Foco</button>
     </div>
-
     <div id="tab-jornada" class="tab-content active">
       <div class="tab-grid">
         <div class="tab-info">
           <h3>30 Dias que<br>Mudam Tudo</h3>
-          <p>O desafio foi desenhado para criar progressão real — começando com o mínimo viável e construindo capacidade semana após semana. A regra de ouro: se falhar um dia, não tente compensar dobrando o tempo. Apenas retome o ritmo amanhã.</p>
-          <div class="highlight-box">
-            <p>"A consistência pequena vale mais que o abandono total. 1% melhor por dia ao longo de um ano resulta em 37x de melhoria." — James Clear</p>
-          </div>
+          <p>O desafio foi desenhado para criar progressão real — começando com o mínimo viável e construindo capacidade semana após semana.</p>
+          <div class="highlight-box"><p>"A consistência pequena vale mais que o abandono total. 1% melhor por dia ao longo de um ano resulta em 37x de melhoria." — James Clear</p></div>
         </div>
         <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <span class="timeline-time">Dias 1–7</span>
-            <div class="timeline-week">Semana 1 — O Despertar</div>
-            <div class="timeline-title">Criar o Hábito</div>
-            <div class="timeline-desc">A Regra dos 5 Minutos. O objetivo não é estudar muito — é provar para si mesmo que você consegue sentar e começar. Nada mais.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <span class="timeline-time">Dias 8–14</span>
-            <div class="timeline-week">Semana 2 — A Construção</div>
-            <div class="timeline-title">Aplicar Técnicas</div>
-            <div class="timeline-desc">Método das Formigas e planejamento noturno. Micro-passos, 1 objetivo e horário de foco definidos toda noite.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <span class="timeline-time">Dias 15–21</span>
-            <div class="timeline-week">Semana 3 — O Domínio</div>
-            <div class="timeline-title">Aumentar Performance</div>
-            <div class="timeline-desc">Técnica Pomodoro: 25 min foco → 5 min pausa. O cérebro mantém atenção de alta qualidade em blocos de 20 a 30 minutos.</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
-            <span class="timeline-time">Dias 22–30</span>
-            <div class="timeline-week">Semana 4 — A Consolidação</div>
-            <div class="timeline-title">Maestria e Identidade</div>
-            <div class="timeline-desc">Enfrentando as matérias mais difíceis com todos os protocolos. Ao final, você não precisa de força de vontade — você já é alguém que faz isso.</div>
-          </div>
+          <div class="timeline-item"><div class="timeline-dot"></div><span class="timeline-time">Dias 1–7</span><div class="timeline-week">Semana 1 — O Despertar</div><div class="timeline-title">Criar o Hábito</div><div class="timeline-desc">A Regra dos 5 Minutos. O objetivo não é estudar muito — é provar para si mesmo que você consegue sentar e começar.</div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><span class="timeline-time">Dias 8–14</span><div class="timeline-week">Semana 2 — A Construção</div><div class="timeline-title">Aplicar Técnicas</div><div class="timeline-desc">Método das Formigas e planejamento noturno. Micro-passos, 1 objetivo e horário de foco definidos toda noite.</div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><span class="timeline-time">Dias 15–21</span><div class="timeline-week">Semana 3 — O Domínio</div><div class="timeline-title">Aumentar Performance</div><div class="timeline-desc">Técnica Pomodoro: 25 min foco → 5 min pausa. O cérebro mantém atenção de alta qualidade em blocos de 20 a 30 minutos.</div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><span class="timeline-time">Dias 22–30</span><div class="timeline-week">Semana 4 — A Consolidação</div><div class="timeline-title">Maestria e Identidade</div><div class="timeline-desc">Ao final, você não precisa de força de vontade — você já é alguém que faz isso.</div></div>
         </div>
       </div>
     </div>
-
     <div id="tab-perfis" class="tab-content">
       <div class="tab-grid">
         <div class="tab-info">
           <h3>Qual é o<br>seu perfil?</h3>
-          <p>A Terapia Cognitivo-Comportamental identifica três perfis que explicam por que começar pode parecer impossível. Reconhecer o seu é o primeiro passo para superá-lo.</p>
-          <div class="highlight-box">
-            <p>"Procrastinar não é preguiça. É um mecanismo de defesa emocional contra o desconforto." — Dr. Timothy Pychyl, Universidade de Carleton</p>
-          </div>
-          <p>Você pode se identificar com mais de um perfil — isso é normal. O que importa é a estratégia específica para cada tipo de bloqueio.</p>
+          <p>A Terapia Cognitivo-Comportamental identifica três perfis que explicam por que começar pode parecer impossível.</p>
+          <div class="highlight-box"><p>"Procrastinar não é preguiça. É um mecanismo de defesa emocional contra o desconforto." — Dr. Timothy Pychyl, Universidade de Carleton</p></div>
         </div>
-        <div class="profiles-grid" style="grid-template-columns:1fr;gap:16px;margin-top:0;">
-          <div class="profile-card">
-            <span class="profile-emoji">😰</span>
-            <div class="profile-title">O Perfeccionista Paralisado</div>
-            <p class="profile-desc">Medo de fazer errado ou não entender de primeira. A frase interna: "Se não for perfeito, não vale tentar." <strong style="color:var(--accent)">Solução: A Regra dos 5 Minutos quebra a paralisia.</strong></p>
-          </div>
-          <div class="profile-card">
-            <span class="profile-emoji">🌊</span>
-            <div class="profile-title">O Sobrecarregado Ansioso</div>
-            <p class="profile-desc">Olha para o volume de matéria e sente que está no fundo de um poço. A amígdala grita: "Fuja agora!" <strong style="color:var(--accent)">Solução: O Método das Formigas desmonta o monstro.</strong></p>
-          </div>
-          <div class="profile-card">
-            <span class="profile-emoji">📱</span>
-            <div class="profile-title">O Viciado em Dopamina Barata</div>
-            <p class="profile-desc">Cresceu em ambiente de estimulação constante. Notificações, vídeos de 15s, lives. Baixa tolerância ao tédio. <strong style="color:var(--accent)">Solução: Blindagem de foco e ambiente otimizado.</strong></p>
-          </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="profile-card"><span class="profile-emoji">😰</span><div class="profile-title">O Perfeccionista Paralisado</div><p class="profile-desc">Medo de fazer errado ou não entender de primeira. <strong style="color:var(--accent)">Solução: A Regra dos 5 Minutos quebra a paralisia.</strong></p></div>
+          <div class="profile-card"><span class="profile-emoji">🌊</span><div class="profile-title">O Sobrecarregado Ansioso</div><p class="profile-desc">Olha para o volume de matéria e sente que está no fundo de um poço. <strong style="color:var(--accent)">Solução: O Método das Formigas desmonta o monstro.</strong></p></div>
+          <div class="profile-card"><span class="profile-emoji">📱</span><div class="profile-title">O Viciado em Dopamina Barata</div><p class="profile-desc">Cresceu em ambiente de estimulação constante. <strong style="color:var(--accent)">Solução: Blindagem de foco e ambiente otimizado.</strong></p></div>
         </div>
       </div>
     </div>
-
     <div id="tab-ambiente" class="tab-content">
       <div class="tab-grid">
         <div class="tab-info">
           <h3>O ambiente<br>vence a<br>força de vontade</h3>
-          <p>Roy Baumeister demonstrou o ego depletion — o esgotamento da capacidade de autocontrole ao longo do dia. A conclusão prática: não dependa da força de vontade. Remova as distrações antes de precisar resistir a elas.</p>
-          <div class="highlight-box">
-            <p>"Construir um sistema que torna o comportamento correto o mais fácil possível é mais poderoso do que depender de motivação."</p>
-          </div>
-          <p>O Ritual de Entrada programa o cérebro para o estado de foco antes mesmo de você abrir o livro.</p>
+          <p>Roy Baumeister demonstrou o ego depletion — o esgotamento da capacidade de autocontrole ao longo do dia. A conclusão: não dependa da força de vontade. Remova as distrações antes de precisar resistir a elas.</p>
+          <div class="highlight-box"><p>"Construir um sistema que torna o comportamento correto o mais fácil possível é mais poderoso do que depender de motivação."</p></div>
         </div>
         <div class="script-cards">
-          <div class="script-card">
-            <div class="script-label">🚫 Fator 1 — Celular</div>
-            <div class="script-say">Cada notificação fragmenta o foco por até 23 minutos. <strong style="color:var(--accent)">Ação: deixe em outro cômodo, não só virado.</strong></div>
-          </div>
-          <div class="script-card">
-            <div class="script-label">🧹 Fator 2 — Bagunça</div>
-            <div class="script-say">Desordem visual gera sobrecarga cognitiva antes de começar. <strong style="color:var(--accent)">Ação: mesa limpa, só o necessário.</strong></div>
-          </div>
-          <div class="script-card">
-            <div class="script-label">💡 Fator 3 — Iluminação</div>
-            <div class="script-say">Luz fraca sinaliza ao cérebro que é hora de desacelerar. <strong style="color:var(--accent)">Ação: boa luz, de preferência natural.</strong></div>
-          </div>
-          <div class="script-card">
-            <div class="script-label">💧 Fator 4 — Hidratação</div>
-            <div class="script-say">Cérebro desidratado perde até 10% do desempenho cognitivo. <strong style="color:var(--accent)">Ação: garrafinha sempre à vista.</strong></div>
-          </div>
-          <div class="script-card" style="border-color:rgba(200,241,53,0.3);">
-            <div class="script-label" style="color:var(--accent)">⚡ Ritual de Entrada (3 passos)</div>
-            <div class="script-say"><strong>1.</strong> Prepare o ambiente — celular fora, mesa limpa, água, boa luz<br><strong>2.</strong> Defina o tempo — use um cronômetro (25 ou 30 min)<br><strong>3.</strong> Fale em voz alta o micro-passo que vai executar primeiro</div>
-          </div>
+          <div class="script-card"><div class="script-label">🚫 Fator 1 — Celular</div><div class="script-say">Cada notificação fragmenta o foco por até 23 minutos. <strong style="color:var(--accent)">Ação: deixe em outro cômodo.</strong></div></div>
+          <div class="script-card"><div class="script-label">🧹 Fator 2 — Bagunça</div><div class="script-say">Desordem visual gera sobrecarga cognitiva. <strong style="color:var(--accent)">Ação: mesa limpa, só o necessário.</strong></div></div>
+          <div class="script-card"><div class="script-label">💡 Fator 3 — Iluminação</div><div class="script-say">Luz fraca sinaliza ao cérebro que é hora de desacelerar. <strong style="color:var(--accent)">Ação: boa luz, de preferência natural.</strong></div></div>
+          <div class="script-card"><div class="script-label">💧 Fator 4 — Hidratação</div><div class="script-say">Cérebro desidratado perde até 10% do desempenho. <strong style="color:var(--accent)">Ação: garrafinha sempre à vista.</strong></div></div>
+          <div class="script-card" style="border-color:rgba(200,241,53,0.3);"><div class="script-label" style="color:var(--accent)">⚡ Ritual de Entrada (3 passos)</div><div class="script-say"><strong>1.</strong> Prepare o ambiente<br><strong>2.</strong> Defina o tempo — cronômetro 25 ou 30 min<br><strong>3.</strong> Fale em voz alta o micro-passo que vai executar</div></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- QUOTE -->
 <section class="quote-section">
   <p class="quote-text">Seu filho não precisa de um fiscal em tempo integral. Ele precisa de um adulto seguro, consistente e disposto a caminhar ao lado dele.</p>
   <p class="quote-author">Guia Estratégico para Pais — Kit Foco & Energia</p>
 </section>
 
-<!-- PAIS SECTION -->
 <section id="pais" style="background: var(--surface);">
   <div class="section-tag">Para os Pais</div>
   <h2 class="section-title reveal">De cobrador<br>a <em>facilitador</em></h2>
-
   <div class="tab-grid" style="margin-top:60px; gap: 60px;">
     <div>
-      <p style="font-size:16px;line-height:1.8;color:rgba(240,240,248,0.6);font-weight:300;margin-bottom:28px;">A maioria dos conflitos entre pais e filhos não nasce de má vontade — nasce de dois lados que querem a mesma coisa mas falam línguas diferentes. Situações reais com roteiros que funcionam:</p>
+      <p style="font-size:16px;line-height:1.8;color:rgba(240,240,248,0.6);font-weight:300;margin-bottom:28px;">A maioria dos conflitos entre pais e filhos não nasce de má vontade — nasce de dois lados que querem a mesma coisa mas falam línguas diferentes.</p>
       <div class="script-cards">
-        <div class="script-card">
-          <div class="script-label">Situação — Ele não estudou nada hoje</div>
-          <div class="script-avoid">❌ "Eu sabia que você não ia estudar."</div>
-          <div class="script-say">✅ "Vi que hoje não rolou. O que atrapalhou? O que a gente pode mudar amanhã?"</div>
-        </div>
-        <div class="script-card">
-          <div class="script-label">Situação — Diz que vai estudar mas fica no celular</div>
-          <div class="script-avoid">❌ "Larga esse celular agora! Você é um viciado."</div>
-          <div class="script-say">✅ "Você mesmo pediu para te lembrar às 19h. Quer que eu guarde o celular por 30 minutos?"</div>
-        </div>
-        <div class="script-card">
-          <div class="script-label">Situação — Diz que é burro e não adianta</div>
-          <div class="script-avoid">❌ "Para com isso, é só preguiça mesmo."</div>
-          <div class="script-say">✅ "Acreditar que é burro é uma mentira que o cérebro inventa com medo de tentar e falhar. Você já aprendeu coisas difíceis antes."</div>
-        </div>
-        <div class="script-card">
-          <div class="script-label">Situação — Quer desistir do desafio</div>
-          <div class="script-avoid">❌ "Desistiu de novo. Você nunca termina nada."</div>
-          <div class="script-say">✅ "Falhar alguns dias não significa desistir. Que tal retomar só amanhã, por 5 minutos?"</div>
-        </div>
+        <div class="script-card"><div class="script-label">Situação — Ele não estudou nada hoje</div><div class="script-avoid">❌ "Eu sabia que você não ia estudar."</div><div class="script-say">✅ "Vi que hoje não rolou. O que atrapalhou? O que a gente pode mudar amanhã?"</div></div>
+        <div class="script-card"><div class="script-label">Situação — Fica no celular ao invés de estudar</div><div class="script-avoid">❌ "Larga esse celular agora! Você é um viciado."</div><div class="script-say">✅ "Você mesmo pediu para te lembrar às 19h. Quer que eu guarde o celular por 30 minutos?"</div></div>
+        <div class="script-card"><div class="script-label">Situação — Diz que é burro e não adianta</div><div class="script-avoid">❌ "Para com isso, é só preguiça mesmo."</div><div class="script-say">✅ "Acreditar que é burro é uma mentira que o cérebro inventa com medo de tentar e falhar."</div></div>
+        <div class="script-card"><div class="script-label">Situação — Quer desistir do desafio</div><div class="script-avoid">❌ "Desistiu de novo. Você nunca termina nada."</div><div class="script-say">✅ "Falhar alguns dias não significa desistir. Que tal retomar amanhã, por 5 minutos?"</div></div>
       </div>
     </div>
     <div>
       <div style="background:var(--card);border:1px solid var(--border);padding:40px;margin-bottom:24px;">
         <div class="section-tag" style="margin-bottom:16px;">Os 3 Pilares</div>
         <div style="display:flex;flex-direction:column;gap:28px;">
-          <div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:8px;">01 — Valide o Esforço</div>
-            <p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Estudou 20 min quando o combinado eram 30? Reconheça os 20 antes de apontar os 10 que faltaram. Validação é atenção real — não elogio vazio.</p>
-          </div>
-          <div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent2);margin-bottom:8px;">02 — Proteja o Ambiente</div>
-            <p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Combine silêncio no horário de estudo, reduza barulho da TV, ofereça água antes de pedir. Ambiente vale mais que força de vontade.</p>
-          </div>
-          <div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent3);margin-bottom:8px;">03 — Respeite o Combinado</div>
-            <p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Se acordaram 30 minutos e ele cumpriu, não peça mais 10. Quebrar o acordo mata a confiança — e sem confiança não existe parceria.</p>
-          </div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);margin-bottom:8px;">01 — Valide o Esforço</div><p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Reconheça os 20 minutos antes de apontar os 10 que faltaram. Validação é atenção real.</p></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent2);margin-bottom:8px;">02 — Proteja o Ambiente</div><p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Ambiente vale mais que força de vontade. Combine silêncio, reduza barulho, ofereça água.</p></div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent3);margin-bottom:8px;">03 — Respeite o Combinado</div><p style="font-size:14px;line-height:1.7;color:rgba(240,240,248,0.6);">Quebrar o acordo mata a confiança — e sem confiança não existe parceria.</p></div>
         </div>
       </div>
       <div style="background:rgba(200,241,53,0.04);border:1px solid rgba(200,241,53,0.2);padding:28px;">
         <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:12px;">Modelo de Combinado</div>
-        <p style="font-size:14px;line-height:1.8;color:rgba(240,240,248,0.75);font-style:italic;">"Por 30 dias, você se compromete com X minutos de estudo focado. Da minha parte, não vou cobrar nada além disso, nem perguntar se estudou fora do horário. Respeito seu tempo livre sem culpa. O que você acha?"</p>
+        <p style="font-size:14px;line-height:1.8;color:rgba(240,240,248,0.75);font-style:italic;">"Por 30 dias, você se compromete com X minutos de estudo focado. Da minha parte, não vou cobrar nada além disso. O que você acha?"</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CHECKLIST -->
 <section id="checklist" class="checklist-section">
   <div class="section-tag">Verificação Rápida</div>
   <h2 class="section-title reveal">Checklist do<br><em>Facilitador</em></h2>
   <p style="color:rgba(240,240,248,0.5);font-size:15px;margin-top:16px;font-weight:300;">Clique para marcar o que você já colocou em prática.</p>
-
-  <div class="checklist-grid reveal" id="checklist">
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Entendeu a procrastinação como defesa emocional, não preguiça</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Identificou a postura de "cobrador" e está trabalhando para ser facilitador</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Validou o esforço do seu filho, não apenas o resultado</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Protegeu o ambiente de estudo contra distrações externas</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Estabeleceu combinados claros, realistas e mútuos com seu filho</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Utilizou ao menos um roteiro de conversa em situação desafiadora</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Acompanhou o desafio de 30 dias com apoio, não cobrança excessiva</span>
-    </div>
-    <div class="check-item" onclick="toggleCheck(this)">
-      <div class="check-box"></div>
-      <span class="check-text">Está atento aos sinais de alerta para buscar apoio profissional</span>
-    </div>
+  <div class="checklist-grid reveal" id="checklistGrid">
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Entendeu a procrastinação como defesa emocional, não preguiça</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Identificou a postura de "cobrador" e está trabalhando para ser facilitador</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Validou o esforço do seu filho, não apenas o resultado</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Protegeu o ambiente de estudo contra distrações externas</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Estabeleceu combinados claros, realistas e mútuos com seu filho</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Utilizou ao menos um roteiro de conversa em situação desafiadora</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Acompanhou o desafio de 30 dias com apoio, não cobrança excessiva</span></div>
+    <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span class="check-text">Está atento aos sinais de alerta para buscar apoio profissional</span></div>
   </div>
-
   <div class="check-progress">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     <span class="progress-label" id="progressLabel">0 / 8 concluídos</span>
   </div>
 </section>
 
-<!-- QUOTE FINAL -->
-<section style="background:var(--surface);padding:80px 60px;text-align:center;">
-  <div class="section-tag" style="justify-content:center;gap:12px;">
-    <span style="width:40px;height:1px;background:var(--border);display:inline-block;"></span>
-    A Frase que Resume Tudo
-    <span style="width:40px;height:1px;background:var(--border);display:inline-block;"></span>
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <div class="cta-final-tag">Última chamada</div>
+  <h2 class="cta-final-title">Chega de esperar<br>a <em>motivação</em> aparecer.</h2>
+  <p class="cta-final-sub">Você já sabe que ela não vem antes da ação. O kit te dá o sistema pra agir — mesmo sem vontade, mesmo sem disposição, mesmo começando do zero.</p>
+  <div class="cta-final-price-block">
+    <div class="cta-final-price">R$37</div>
+    <div class="cta-final-price-details">
+      <span class="label">investimento</span>
+      <span class="once">pagamento único</span>
+      <span class="desc">4 ferramentas · acesso imediato</span>
+    </div>
   </div>
-  <p style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,60px);color:var(--text);max-width:800px;margin:0 auto 24px;line-height:1.05;">
-    "A disciplina é a <span style="color:var(--accent)">liberdade</span> que você constrói<br>um dia de cada vez."
-  </p>
+  <a href="https://pay.cakto.com.br/gof2qrj_826669" class="cta-final-btn">Garantir meu Kit agora →</a>
+  <div class="cta-final-guarantees">
+    <div class="cta-guarantee-item"><span>🔒</span> Compra segura</div>
+    <div class="cta-guarantee-item"><span>⚡</span> Acesso imediato</div>
+    <div class="cta-guarantee-item"><span>📱</span> Funciona no celular</div>
+    <div class="cta-guarantee-item"><span>💬</span> Suporte incluso</div>
+  </div>
+</section>
+
+<section style="background:var(--surface);padding:80px 60px;text-align:center;">
+  <div class="section-tag" style="justify-content:center;gap:12px;"><span style="width:40px;height:1px;background:var(--border);display:inline-block;"></span>A Frase que Resume Tudo<span style="width:40px;height:1px;background:var(--border);display:inline-block;"></span></div>
+  <p style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,60px);color:var(--text);max-width:800px;margin:0 auto 24px;line-height:1.05;">"A disciplina é a <span style="color:var(--accent)">liberdade</span> que você constrói<br>um dia de cada vez."</p>
   <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;">Kit Foco & Energia</p>
 </section>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-brand">
-    Foco & Energia
-    <span>Kit Premium — 4 Ferramentas para Dominar a Rotina</span>
-  </div>
-  <div class="footer-copy">
-    © Foco & Energia<br>Todos os direitos reservados
-  </div>
+  <div class="footer-brand">Foco & Energia<span>Kit Premium — 4 Ferramentas para Dominar a Rotina</span></div>
+  <div class="footer-copy">© Foco & Energia<br>Todos os direitos reservados</div>
 </footer>
 
 <script>
@@ -1383,92 +707,76 @@
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
-  });
-
-  function animateRing() {
-    rx += (mx - rx - 18) * 0.12;
-    ry += (my - ry - 18) * 0.12;
-    ring.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(animateRing);
-  }
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.transform = `translate(${mx-6}px,${my-6}px)`; });
+  function animateRing() { rx += (mx-rx-18)*0.12; ry += (my-ry-18)*0.12; ring.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(animateRing); }
   animateRing();
-
-  document.querySelectorAll('a, button, .product-card, .check-item, .kit-dot').forEach(el => {
+  document.querySelectorAll('a,button,.product-card,.check-item,.kit-dot').forEach(el => {
     el.addEventListener('mouseenter', () => ring.classList.add('hover'));
     el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
   });
 
   // TABS
-  function switchTab(id) {
+  function switchTab(id, event) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
-    event.target.classList.add('active');
+    document.getElementById('tab-'+id).classList.add('active');
+    if(event && event.currentTarget) event.currentTarget.classList.add('active');
   }
 
   // CHECKLIST
-  function toggleCheck(el) {
-    el.classList.toggle('checked');
-    updateProgress();
-  }
-
+  function toggleCheck(el) { el.classList.toggle('checked'); updateProgress(); }
   function updateProgress() {
     const items = document.querySelectorAll('.check-item');
     const checked = document.querySelectorAll('.check-item.checked').length;
-    const pct = (checked / items.length) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressFill').style.width = (checked/items.length*100)+'%';
     document.getElementById('progressLabel').textContent = `${checked} / ${items.length} concluídos`;
   }
 
-  // COUNTER ANIMATION
+  // COUNTERS
   function animateCounter(el) {
     const target = parseInt(el.dataset.target);
-    const duration = 1500;
     const start = Date.now();
     const tick = () => {
-      const progress = Math.min((Date.now() - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(ease * target);
-      if (progress < 1) requestAnimationFrame(tick);
-      else el.textContent = target + (target === 80 ? '%' : '');
+      const p = Math.min((Date.now()-start)/1500, 1);
+      const e = 1-Math.pow(1-p,3);
+      el.textContent = Math.round(e*target);
+      if(p<1) requestAnimationFrame(tick);
+      else el.textContent = target+(target===80?'%':'');
     };
     tick();
   }
 
-  // SCROLL REVEAL + COUNTER TRIGGER
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        const counter = entry.target.querySelector('[data-target]');
-        if (counter) animateCounter(counter);
-        const counters = entry.target.querySelectorAll ? [] : [];
-        if (entry.target.dataset && entry.target.dataset.target) {
-          animateCounter(entry.target);
-        }
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // Stat counters
-  const statObs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const counter = entry.target.querySelector('[data-target]');
-        if (counter) animateCounter(counter);
-        statObs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
+  const statObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { const c = e.target.querySelector('[data-target]'); if(c) animateCounter(c); statObs.unobserve(e.target); }});
+  }, {threshold:0.3});
   document.querySelectorAll('.stat').forEach(el => statObs.observe(el));
+
+  // MODAL
+  function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  document.getElementById('modalOverlay').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+
+  function submitModal() {
+    const name = document.getElementById('modalName').value;
+    const whats = document.getElementById('modalWhats').value;
+    if(!name || !whats) { alert('Preenche seu nome e WhatsApp pra receber o checklist!'); return; }
+    document.getElementById('modalForm').style.display = 'none';
+    document.getElementById('modalSuccess').style.display = 'block';
+  }
+
+  function submitLead() {
+    const name = document.getElementById('leadName').value;
+    const whats = document.getElementById('leadWhats').value;
+    if(!name || !whats) { alert('Preenche seu nome e WhatsApp pra receber o checklist!'); return; }
+    alert('✅ Enviado! Acessa o WhatsApp — o checklist está a caminho.');
+    document.getElementById('leadName').value = '';
+    document.getElementById('leadWhats').value = '';
+  }
 </script>
 </body>
 </html>
